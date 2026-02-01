@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Scan Prescription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-indigo-50 dark:bg-slate-900">
+
+    <div class="app-content max-w-md mx-auto relative min-h-screen">
+
+        <header
+            class="p-6 flex items-center space-x-4 sticky top-0 bg-indigo-50/90 dark:bg-slate-900/90 backdrop-blur z-20">
+            <button onclick="history.back()" class="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800">
+                <i data-feather="arrow-left" class="text-slate-700 dark:text-white"></i>
+            </button>
+            <h1 class="text-xl font-bold text-slate-800 dark:text-white">New Prescription</h1>
+        </header>
+
+        <main class="p-6 space-y-6">
+
+            <!-- Upload Zone -->
+            <div id="upload-zone"
+                class="border-4 border-dashed border-indigo-200 dark:border-slate-700 rounded-3xl p-8 text-center bg-white dark:bg-slate-800 transition-all hover:border-indigo-400 cursor-pointer relative shadow-sm"
+                onclick="triggerFileSelect()">
+                <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFileSelect(this)">
+
+                <div id="placeholder" class="space-y-4">
+                    <div
+                        class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mx-auto text-indigo-500">
+                        <i data-feather="camera" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-700 dark:text-slate-200">Tap to Scan</p>
+                        <p class="text-xs text-slate-400 mt-2">AI automatically extracts details</p>
+                    </div>
+                </div>
+
+                <div id="preview-container" class="hidden h-64 relative rounded-xl overflow-hidden mt-4">
+                    <img id="preview-img" src="" class="w-full h-full object-cover">
+                    <!-- Scanner Animation Overlay -->
+                    <div id="scan-overlay"
+                        class="absolute inset-0 bg-black/50 hidden flex-col items-center justify-center">
+                        <div
+                            class="w-full h-1 bg-green-400 shadow-[0_0_15px_rgba(74,222,128,1)] animate-scan-line absolute top-0">
+                        </div>
+                        <span
+                            class="text-white font-bold bg-black/60 px-4 py-2 rounded-full backdrop-blur mt-8">Analyzing...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Result (Hidden initially) -->
+            <div id="ocr-results" class="hidden space-y-4 animate-fade-in-up">
+                <div class="flex items-center space-x-2 text-green-600 font-bold text-sm">
+                    <i data-feather="check-circle" class="w-4 h-4"></i>
+                    <span>2 Medications Found</span>
+                </div>
+
+                <!-- Extracted Med 1 -->
+                <div
+                    class="card bg-white dark:bg-slate-800 p-4 border border-indigo-100 dark:border-slate-700 space-y-3 med-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white" contenteditable="true">
+                                Amoxicillin</h3>
+                            <p class="text-xs text-slate-500" contenteditable="true">500mg</p>
+                        </div>
+                        <input type="checkbox" checked class="w-5 h-5 accent-indigo-600 rounded">
+                    </div>
+
+                    <!-- Schedule Routing -->
+                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-2">Add to Routine</p>
+                        <div class="flex space-x-2">
+                            <button onclick="toggleSlot(this, 'Morning')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Morning</button>
+                            <button onclick="toggleSlot(this, 'Afternoon')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Afternoon</button>
+                            <button onclick="toggleSlot(this, 'Night')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Night</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extracted Med 2 -->
+                <div
+                    class="card bg-white dark:bg-slate-800 p-4 border border-indigo-100 dark:border-slate-700 space-y-3 med-item">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white" contenteditable="true">
+                                Paracetamol</h3>
+                            <p class="text-xs text-slate-500" contenteditable="true">650mg</p>
+                        </div>
+                        <input type="checkbox" checked class="w-5 h-5 accent-indigo-600 rounded">
+                    </div>
+
+                    <!-- Schedule Routing -->
+                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-2">Add to Routine</p>
+                        <div class="flex space-x-2">
+                            <button onclick="toggleSlot(this, 'Morning')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Morning</button>
+                            <button onclick="toggleSlot(this, 'Afternoon')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Afternoon</button>
+                            <button onclick="toggleSlot(this, 'Night')"
+                                class="slot-btn px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-bold rounded-full border border-transparent hover:border-indigo-500">Night</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="commitToSchedule()"
+                        class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 transition flex items-center justify-center space-x-2">
+                        <i data-feather="calendar" class="w-5 h-5"></i>
+                        <span>Update Schedule</span>
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <style>
+        .slot-btn.active {
+            background-color: #EEF2FF;
+            color: #4F46E5;
+            border-color: #4F46E5;
+        }
+
+        .dark .slot-btn.active {
+            background-color: #312E81;
+            color: #818CF8;
+            border-color: #818CF8;
+        }
+
+        @keyframes scan-line {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .animate-scan-line {
+            animation: scan-line 2s linear infinite;
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        function triggerFileSelect() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleFileSelect(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('preview-img');
+                    preview.src = e.target.result;
+
+                    document.getElementById('placeholder').classList.add('hidden');
+                    document.getElementById('preview-container').classList.remove('hidden');
+                    document.getElementById('scan-overlay').classList.remove('hidden');
+                    document.getElementById('scan-overlay').classList.add('flex');
+
+                    // Simulate processing
+                    setTimeout(() => {
+                        document.getElementById('scan-overlay').classList.add('hidden');
+                        document.getElementById('scan-overlay').classList.remove('flex');
+                        document.getElementById('ocr-results').classList.remove('hidden');
+
+                        // Default slots selection for demo
+                        document.querySelectorAll('.med-item').forEach((item, index) => {
+                            const slots = item.querySelectorAll('.slot-btn');
+                            if (index === 0) slots[0].classList.add('active'); // Amox -> Morning
+                            if (index === 1) slots[2].classList.add('active'); // Para -> Night
+                        });
+
+                    }, 2500);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function toggleSlot(btn, time) {
+            btn.classList.toggle('active');
+        }
+
+        function commitToSchedule() {
+            // Loop through med items
+            let medsAdded = 0;
+            document.querySelectorAll('.med-item').forEach(item => {
+                const name = item.querySelector('h3').innerText;
+                const dose = item.querySelector('p').innerText;
+                const isChecked = item.querySelector('input[type="checkbox"]').checked;
+
+                if (isChecked) {
+                    // Check active slots
+                    item.querySelectorAll('.slot-btn.active').forEach(slotBtn => {
+                        const timeLabel = slotBtn.innerText;
+                        addMedToSchedule(name, dose, timeLabel);
+                        medsAdded++;
+                    });
+                }
+            });
+
+            if (medsAdded > 0) {
+                showToast(`Successfully added ${medsAdded} routines!`);
+                setTimeout(() => {
+                    window.location.href = 'dashboard-patient.html'; // Or caregiver
+                }, 1500);
+            } else {
+                alert('Please select at least one time slot for the medicines.');
+            }
+        }
+        feather.replace();
+    </script>
+</body>
+
+</html>

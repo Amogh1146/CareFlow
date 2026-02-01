@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CareFlow - Dad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script> <!-- Load first for AppState -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body class="bg-indigo-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-20">
+
+    <!-- App Content Wrapper -->
+    <div class="app-content max-w-md mx-auto relative min-h-screen">
+
+        <!-- Large Header -->
+        <header
+            class="p-6 pt-12 pb-4 flex items-center justify-between sticky top-0 bg-indigo-50/95 dark:bg-slate-900/95 z-20 backdrop-blur">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight">Healthy Morning, <span
+                        class="text-indigo-600 dark:text-indigo-400">Dad</span></h1>
+                <p class="text-slate-500 dark:text-slate-400 font-medium text-sm" id="current-date">Sunday, 24 Oct</p>
+            </div>
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-indigo-200 shadow-md cursor-pointer hover:scale-105 transition"
+                onclick="window.location.href='profiles-select.html'">
+                <img src="assets/profiles/dad.png" alt="Dad">
+            </div>
+        </header>
+
+        <!-- Big Focus Card (Next Med) -->
+        <main class="px-6 space-y-6">
+
+            <section
+                class="card bg-white dark:bg-slate-800 p-6 border-l-8 border-indigo-500 relative overflow-hidden shadow-xl rounded-3xl">
+                <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                    <i data-feather="sun" class="w-40 h-40 text-indigo-500"></i>
+                </div>
+
+                <h2 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">
+                    Morning Routine</h2>
+                <div class="flex items-end space-x-2 mb-6">
+                    <span class="text-5xl font-black tracking-tighter">9:00</span>
+                    <span class="text-xl font-bold text-slate-400 pb-2">AM</span>
+                </div>
+
+                <div id="next-dose-container" class="space-y-4 mb-8 relative z-10 min-h-[100px]">
+                    <!-- Meds injected here -->
+                </div>
+
+                <button onclick="markAllTaken()" id="main-action-btn"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg py-4 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center space-x-3">
+                    <i data-feather="check-circle" class="w-7 h-7"></i>
+                    <span>Mark All Taken</span>
+                </button>
+            </section>
+
+            <!-- Best Features Grid: Hydration & Mood -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Water Tracker -->
+                <section
+                    class="card p-5 bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg rounded-3xl border-none space-y-3 relative overflow-hidden group">
+                    <div class="absolute -bottom-4 -right-4 opacity-10 group-hover:scale-110 transition-transform">
+                        <i data-feather="droplet" class="w-20 h-20"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Hydration Hub</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-3xl font-black" id="water-count">5</span>
+                            <span class="text-xs font-bold opacity-60">/8</span>
+                        </div>
+                        <button onclick="addWater()"
+                            class="bg-white/20 hover:bg-white/30 p-2 rounded-xl backdrop-blur-md transition-all active:scale-90">
+                            <i data-feather="plus" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="flex space-x-1">
+                        <div class="h-1.5 flex-1 bg-white/20 rounded-full overflow-hidden">
+                            <div id="water-progress" class="h-full bg-white transition-all duration-500"
+                                style="width: 62.5%"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mood Tracker -->
+                <section class="card p-5 bg-white dark:bg-slate-800 shadow-md rounded-3xl space-y-3">
+                    <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">How are you feeling?</p>
+                    <div class="flex justify-between items-center pt-1">
+                        <button onclick="setMood('happy', this)"
+                            class="text-2xl hover:scale-125 transition-transform grayscale hover:grayscale-0 mood-btn">😊</button>
+                        <button onclick="setMood('neutral', this)"
+                            class="text-2xl hover:scale-125 transition-transform grayscale hover:grayscale-0 mood-btn">😐</button>
+                        <button onclick="setMood('low', this)"
+                            class="text-2xl hover:scale-125 transition-transform grayscale hover:grayscale-0 mood-btn">😔</button>
+                    </div>
+                    <p id="mood-status"
+                        class="text-[10px] text-center font-bold text-indigo-500 hidden uppercase tracking-tighter">
+                        Status: Great!</p>
+                </section>
+            </div>
+
+            <!-- Vitals Quick Log -->
+            <section>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-bold flex items-center text-slate-400 uppercase tracking-wider">
+                        <i data-feather="activity" class="w-4 h-4 mr-2 text-red-500"></i>
+                        Health Vitals
+                    </h3>
+                    <div
+                        class="bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse">
+                        LIVE MONITORING
+                    </div>
+                </div>
+                <div class="card p-5 bg-white dark:bg-slate-800 shadow-md rounded-2xl space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 uppercase block mb-1">Blood Pressure</label>
+                            <div class="relative">
+                                <input type="number" placeholder="120" id="bp-sys"
+                                    class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 font-bold text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <span class="absolute right-3 top-3 text-slate-400 text-sm">Sys</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-white uppercase block mb-1 opacity-0">Dia</label>
+                            <!-- Spacer -->
+                            <div class="relative">
+                                <input type="number" placeholder="80" id="bp-dia"
+                                    class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 font-bold text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <span class="absolute right-3 top-3 text-slate-400 text-sm">Dia</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="logVitals()"
+                        class="w-full py-3 rounded-xl border-2 border-slate-100 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        Log Readings
+                    </button>
+                </div>
+            </section>
+
+            <!-- Adherence Status -->
+            <section
+                class="card p-5 flex flex-col items-center justify-center text-center space-y-2 dark:bg-slate-800 shadow-md bg-white rounded-3xl border border-indigo-50 dark:border-slate-700">
+                <div class="text-green-500 bg-green-100 dark:bg-green-900/30 p-3 rounded-full">
+                    <i data-feather="trending-up" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="font-black text-3xl block">98%</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Adherence</span>
+                </div>
+            </section>
+
+            <!-- Premium Medical Safety Center (SOS) -->
+            <section
+                class="card bg-gradient-to-br from-red-600 to-rose-700 text-white shadow-2xl rounded-[2rem] border-none relative overflow-hidden group">
+                <!-- Decorative Elements -->
+                <div
+                    class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-500">
+                </div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-black/10 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 p-6 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
+                                <i data-feather="life-buoy" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-black uppercase tracking-tight">Safety Center</h2>
+                                <p class="text-red-100 text-xs font-medium">Emergency assistance 24/7</p>
+                            </div>
+                        </div>
+                        <div class="flex -space-x-3">
+                            <img src="assets/profiles/asha.png"
+                                class="w-10 h-10 rounded-full border-2 border-red-500 shadow-lg object-cover"
+                                id="sos-avatar-1" alt="Asha">
+                            <img src="assets/profiles/sharma.png"
+                                class="w-10 h-10 rounded-full border-2 border-red-500 shadow-lg object-cover"
+                                id="sos-avatar-2" alt="Doctor">
+                            <div
+                                class="w-10 h-10 rounded-full border-2 border-red-500 bg-red-400 flex items-center justify-center text-[10px] font-bold shadow-lg">
+                                +2</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="triggerGlobalSOS()"
+                            class="col-span-2 bg-white text-red-600 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all text-lg uppercase tracking-widest flex items-center justify-center space-x-3">
+                            <i data-feather="bell" class="w-6 h-6"></i>
+                            <span>Global SOS Alert</span>
+                        </button>
+
+                        <a href="tel:108"
+                            class="bg-black/20 hover:bg-black/30 backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center space-y-1 transition-colors">
+                            <i data-feather="truck" class="w-5 h-5 text-red-100"></i>
+                            <span class="text-[10px] font-black uppercase tracking-tighter">Ambulance</span>
+                        </a>
+
+                        <a href="tel:+919876543210" id="emergency-contact-link"
+                            class="bg-black/20 hover:bg-black/30 backdrop-blur-md rounded-2xl p-4 flex flex-col items-center justify-center text-center space-y-1 transition-colors">
+                            <i data-feather="phone-call" class="w-5 h-5 text-red-100"></i>
+                            <span class="text-[10px] font-black uppercase tracking-tighter"
+                                id="emergency-contact-label">Call Asha</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="h-10"></div>
+        </main>
+
+        <!-- Simplified Nav -->
+        <nav
+            class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 pb-[env(safe-area-inset-bottom)] z-50 max-w-md mx-auto shadow-[0_-5px_10px_rgba(0,0,0,0.05)]">
+            <div class="h-16 flex justify-around items-center px-4">
+                <a href="#"
+                    class="nav-btn flex flex-col items-center text-indigo-600 transition-transform active:scale-90">
+                    <i data-feather="home" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Home</span>
+                </a>
+                <a href="onboarding.html"
+                    class="nav-btn flex flex-col items-center text-slate-400 hover:text-indigo-500 transition-colors active:scale-90">
+                    <div
+                        class="bg-indigo-50 dark:bg-indigo-900/50 p-2 rounded-xl -mt-6 border-4 border-white dark:border-slate-900 shadow-lg">
+                        <i data-feather="camera" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i>
+                    </div>
+                    <span class="text-[10px] font-bold mt-1">Scan</span>
+                </a>
+                <a href="settings.html"
+                    class="nav-btn flex flex-col items-center text-slate-400 hover:text-indigo-500 transition-colors active:scale-90">
+                    <i data-feather="settings" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Settings</span>
+                </a>
+            </div>
+        </nav>
+
+    </div>
+
+    <script>
+        // BEST FEATURES LOGIC
+        let currentWater = parseInt(localStorage.getItem('careflow_water')) || 0;
+
+        function updateWaterUI() {
+            const countEl = document.getElementById('water-count');
+            const progressEl = document.getElementById('water-progress');
+            if (countEl) countEl.textContent = currentWater;
+            if (progressEl) {
+                const progress = (currentWater / 8) * 100;
+                progressEl.style.width = Math.min(progress, 100) + '%';
+            }
+            localStorage.setItem('careflow_water', currentWater);
+        }
+
+        function addWater() {
+            if (currentWater < 12) {
+                currentWater++;
+                updateWaterUI();
+                if (currentWater === 8) celebrate('Maximum Hydration! 💧');
+            }
+        }
+
+        function setMood(type, btn) {
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.add('grayscale'));
+            btn.classList.remove('grayscale');
+            const status = document.getElementById('mood-status');
+            if (status) {
+                status.classList.remove('hidden');
+                const moods = {
+                    'happy': 'Status: Feeling Great! ✨',
+                    'neutral': 'Status: Feeling Okay ⚖️',
+                    'low': 'Status: Resting 🕯️'
+                };
+                status.textContent = moods[type];
+            }
+            showToast(`Logged mood: ${type}`);
+        }
+
+        function celebrate(msg = 'Great Job!') {
+            if (window.confetti) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#4F46E5', '#10B981', '#F59E0B']
+                });
+            }
+            showToast(msg);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AppState.currentUser;
+            if (user) {
+                // Update Greeting
+                const greeting = document.querySelector('header h1 span');
+                if (greeting) greeting.textContent = user.name;
+
+                // Update Header Avatar
+                const headerAvatar = document.querySelector('header img');
+                if (headerAvatar) headerAvatar.src = user.avatar;
+
+                // Sync Emergency UI with Role
+                const emergLink = document.getElementById('emergency-contact-link');
+                const emergLabel = document.getElementById('emergency-contact-label');
+                const sosAvatar1 = document.getElementById('sos-avatar-1');
+
+                if (user.name === 'Asha') {
+                    if (emergLabel) emergLabel.textContent = "Call Nurse Maya";
+                    if (emergLink) emergLink.href = "tel:+919876543213";
+                    if (sosAvatar1) sosAvatar1.src = "assets/profiles/maya.png";
+                } else if (user.name.includes('Maya')) {
+                    if (emergLabel) emergLabel.textContent = "Call Asha";
+                    if (emergLink) emergLink.href = "tel:+919876543210";
+                    if (sosAvatar1) sosAvatar1.src = "assets/profiles/asha.png";
+                }
+                // Default is Dad calling Asha, which is already set in HTML
+            }
+
+            // Set Date
+            const d = new Date();
+            document.getElementById('current-date').textContent = d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
+
+            renderNextDose();
+            updateWaterUI();
+            feather.replace();
+        });
+
+        function renderNextDose() {
+            const morningSlot = AppState.medSchedule.find(s => s.label === 'Morning');
+            const container = document.getElementById('next-dose-container');
+
+            if (morningSlot && morningSlot.meds && morningSlot.meds.length > 0) {
+                container.innerHTML = morningSlot.meds.map((med, index) => `
+                    <div id="med-${index}" class="flex items-center space-x-4 p-3 rounded-xl transition-all ${med.taken ? 'bg-green-50 dark:bg-green-900/20 opacity-50' : 'bg-transparent'}">
+                        <div class="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-xl text-indigo-600 dark:text-indigo-300 transition-colors ${med.taken ? 'bg-green-200 text-green-700' : ''}">
+                             <i data-feather="${med.taken ? 'check' : 'package'}" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-xl ${med.taken ? 'line-through text-slate-400' : ''}">${med.name}</p>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">${med.dose} • Take with food</p>
+                        </div>
+                        ${!med.taken ? `<button onclick="takeSingleMed(${index})" class="p-2 bg-indigo-50 text-indigo-600 rounded-lg font-bold text-xs">Take</button>` : ''}
+                    </div>
+                `).join('');
+
+                // Check if all taken to update big button
+                const allTaken = morningSlot.meds.every(m => m.taken);
+                const btn = document.getElementById('main-action-btn');
+                if (allTaken) {
+                    btn.className = "w-full bg-green-500 text-white font-bold text-xl py-5 rounded-2xl shadow-xl shadow-green-500/30 flex items-center justify-center space-x-3 pointer-events-none";
+                    btn.innerHTML = `<i data-feather="check-all" class="w-8 h-8"></i><span>All Done!</span>`;
+                }
+
+            } else {
+                container.innerHTML = `<div class="text-center p-8 text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200">No meds scheduled for morning.</div>`;
+            }
+            feather.replace();
+        }
+
+        function markAllTaken() {
+            // Update State
+            const morningSlot = AppState.medSchedule.find(s => s.label === 'Morning');
+            if (morningSlot) {
+                morningSlot.meds.forEach(m => m.taken = true);
+                localStorage.setItem('careflow_schedule', JSON.stringify(AppState.medSchedule));
+                renderNextDose();
+                celebrate('Great job, Dad! Streak: 5 Days 🔥');
+            }
+        }
+
+        function takeSingleMed(index) {
+            const el = document.getElementById(`med-${index}`);
+            if (el) el.classList.add('animate-slide-out');
+
+            setTimeout(() => {
+                const morningSlot = AppState.medSchedule.find(s => s.label === 'Morning');
+                if (morningSlot && morningSlot.meds[index]) {
+                    morningSlot.meds[index].taken = true;
+                    localStorage.setItem('careflow_schedule', JSON.stringify(AppState.medSchedule));
+                    renderNextDose();
+
+                    const allDone = morningSlot.meds.every(m => m.taken);
+                    if (allDone) {
+                        celebrate('Morning Meds Complete! 🏆');
+                    } else {
+                        showToast(`Taken: ${morningSlot.meds[index].name}`);
+                    }
+                }
+            }, 500);
+        }
+
+        function logVitals() {
+            const sys = document.getElementById('bp-sys').value;
+            const dia = document.getElementById('bp-dia').value;
+            if (sys && dia) {
+                showToast(`recorded BP: ${sys}/${dia} mmHg`);
+                // Clear
+                document.getElementById('bp-sys').value = '';
+                document.getElementById('bp-dia').value = '';
+            } else {
+                alert("Please enter both numbers.");
+            }
+        }
+    </script>
+</body>
+
+</html>

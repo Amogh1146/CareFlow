@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CareFlow - Select Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-slate-900 text-white antialiased">
+
+    <!-- App Container -->
+    <div
+        class="min-h-screen flex flex-col items-center justify-center p-6 max-w-md mx-auto bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 overflow-y-auto">
+
+        <!-- Header -->
+        <div class="text-center mb-8 w-full animate-fade-in-down">
+            <div
+                class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl ring-4 ring-white/10">
+                <i data-feather="users" class="w-10 h-10 text-white"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold mb-2 text-white tracking-tight">Who's using CareFlow?</h1>
+            <p class="text-purple-200 text-sm font-medium">Select your profile to continue</p>
+        </div>
+
+        <!-- Profile Grid -->
+        <div class="grid grid-cols-2 gap-4 w-full mb-8">
+
+            <!-- Patient Profile -->
+            <button onclick="promptPin('patient', 'Dad')"
+                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/20 transition-all active:scale-95 border border-white/10 group relative overflow-hidden">
+                <div
+                    class="w-full aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-4xl font-bold shadow-lg mb-3 group-hover:shadow-2xl transition-shadow">
+                    <img src="assets/profiles/dad.png" class="w-full h-full object-cover rounded-xl" alt="Dad">
+                </div>
+                <h3 class="text-center font-bold text-lg">Dad</h3>
+                <p class="text-center text-xs text-purple-200 font-medium uppercase tracking-wider">Patient</p>
+            </button>
+
+            <!-- Family Profile -->
+            <button onclick="promptPin('family', 'Asha')"
+                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/20 transition-all active:scale-95 border border-white/10 group relative overflow-hidden">
+                <div
+                    class="w-full aspect-square bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-4xl font-bold shadow-lg mb-3 group-hover:shadow-2xl transition-shadow">
+                    <img src="assets/profiles/asha.png" class="w-full h-full object-cover rounded-xl" alt="Asha">
+                </div>
+                <h3 class="text-center font-bold text-lg">Asha</h3>
+                <p class="text-center text-xs text-blue-200 font-medium uppercase tracking-wider">Family</p>
+            </button>
+
+            <!-- Caregiver Profile -->
+            <button onclick="promptPin('caregiver', 'Nurse Maya')"
+                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/20 transition-all active:scale-95 border border-white/10 group relative overflow-hidden">
+                <div
+                    class="w-full aspect-square bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-4xl font-bold shadow-lg mb-3 group-hover:shadow-2xl transition-shadow">
+                    <img src="assets/profiles/maya.png" class="w-full h-full object-cover rounded-xl" alt="Nurse Maya">
+                </div>
+                <h3 class="text-center font-bold text-lg">Nurse Maya</h3>
+                <p class="text-center text-xs text-emerald-200 font-medium uppercase tracking-wider">Caregiver</p>
+            </button>
+
+            <!-- Doctor Profile -->
+            <button onclick="promptPin('doctor', 'Dr. Sharma')"
+                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/20 transition-all active:scale-95 border border-white/10 group relative overflow-hidden">
+                <div
+                    class="w-full aspect-square bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center text-4xl font-bold shadow-lg mb-3 group-hover:shadow-2xl transition-shadow">
+                    <img src="assets/profiles/sharma.png" class="w-full h-full object-cover rounded-xl"
+                        alt="Dr. Sharma">
+                </div>
+                <h3 class="text-center font-bold text-lg">Dr. Sharma</h3>
+                <p class="text-center text-xs text-orange-200 font-medium uppercase tracking-wider">Doctor</p>
+            </button>
+
+            <!-- Pharmacist Profile -->
+            <button onclick="promptPin('pharmacist', 'Raj')"
+                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/20 transition-all active:scale-95 border border-white/10 group relative overflow-hidden col-span-2 mx-auto w-1/2">
+                <div
+                    class="w-full aspect-square bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-4xl font-bold shadow-lg mb-3 group-hover:shadow-2xl transition-shadow">
+                    <img src="assets/profiles/raj.png" class="w-full h-full object-cover rounded-xl" alt="Raj">
+                </div>
+                <h3 class="text-center font-bold text-lg">Raj</h3>
+                <p class="text-center text-xs text-indigo-200 font-medium uppercase tracking-wider">Pharmacist</p>
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- PIN Modal -->
+    <div id="pin-modal"
+        class="fixed inset-0 bg-slate-950/40 backdrop-blur-md z-[200] flex items-center justify-center p-6 hidden opacity-0 transition-all duration-300">
+        <div class="bg-slate-900/80 backdrop-blur-2xl w-full max-w-sm rounded-[2.5rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 transform scale-95 transition-all duration-300 relative overflow-hidden group"
+            id="pin-content">
+
+            <!-- Decorative Glow -->
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-blue-600/20 rounded-full blur-[80px]"></div>
+
+            <button onclick="closePinModal()"
+                class="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors">
+                <i data-feather="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="text-center mb-8 relative z-10">
+                <div
+                    class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-500/20 ring-4 ring-white/5">
+                    <i data-feather="shield" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white mb-2 tracking-tight">Security Check</h2>
+                <p class="text-slate-400 text-sm font-medium" id="pin-name">Verifying access for Dad</p>
+            </div>
+
+            <div class="relative mb-8 z-10">
+                <input type="password" id="pin-input" maxlength="4" autofocus
+                    class="bg-slate-950/50 text-white text-4xl font-black tracking-[0.8em] text-center w-full rounded-2xl border-2 border-white/5 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 outline-none py-5 transition-all placeholder-white/5"
+                    placeholder="••••">
+                <p id="pin-error" class="text-red-400 text-xs font-bold text-center mt-3 hidden animate-pulse">
+                    <i data-feather="alert-circle" class="w-3 h-3 inline mr-1"></i> Incorrect PIN. Try 1234.
+                </p>
+            </div>
+
+            <button onclick="verifyPin()"
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-600/20 transition-all active:scale-95 text-lg uppercase tracking-widest relative z-10">
+                Access Profile
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        let selectedRole = '';
+        let selectedName = '';
+
+        function promptPin(role, name) {
+            selectedRole = role;
+            selectedName = name;
+
+            const modal = document.getElementById('pin-modal');
+            const content = document.getElementById('pin-content');
+
+            document.getElementById('pin-name').textContent = `Verifying access for ${name}`;
+            document.getElementById('pin-input').value = '';
+            document.getElementById('pin-error').classList.add('hidden');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+                document.getElementById('pin-input').focus();
+            }, 50);
+        }
+
+        function closePinModal() {
+            const modal = document.getElementById('pin-modal');
+            const content = document.getElementById('pin-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function verifyPin() {
+            const pin = document.getElementById('pin-input').value;
+            if (pin === '1234') { // Mock PIN
+                // Success logic
+                login(selectedRole, selectedName);
+            } else {
+                document.getElementById('pin-error').classList.remove('hidden');
+                document.getElementById('pin-input').classList.add('animate-shake');
+                setTimeout(() => document.getElementById('pin-input').classList.remove('animate-shake'), 500);
+            }
+        }
+
+        // Auto-verify on 4 digits
+        document.getElementById('pin-input').addEventListener('input', function (e) {
+            if (this.value.length === 4) verifyPin();
+        });
+
+        feather.replace();
+    </script>
+    <style>
+        .animate-shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    </style>
+</body>
+
+</html>

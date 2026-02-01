@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CareFlow - Loading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-blue-600 flex flex-col items-center justify-center min-h-screen text-white overflow-hidden">
+
+    <div class="relative animate-bounce">
+        <!-- Logo Icon -->
+        <div
+            class="w-32 h-32 bg-white rounded-3xl flex items-center justify-center shadow-2xl relative z-10 transition-transform hover:rotate-12">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                class="w-20 h-20 text-blue-600 stroke-current stroke-2 scale-110">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+        </div>
+        <!-- Pulse effect -->
+        <div class="absolute inset-0 bg-white/30 rounded-3xl animate-ping z-0"></div>
+    </div>
+
+    <h1 class="text-4xl font-black mt-8 tracking-tight animate-fade-in-up">CareFlow</h1>
+    <p class="text-blue-200 mt-2 font-medium tracking-wide">Family Heatlh Simplified</p>
+
+    <!-- Loading Bar -->
+    <div class="w-48 h-1 bg-blue-800/30 rounded-full mt-12 overflow-hidden">
+        <div class="h-full bg-white animate-loading-bar w-0"></div>
+    </div>
+
+    <style>
+        @keyframes loading-bar {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        .animate-loading-bar {
+            animation: loading-bar 1.5s ease-in-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <script>
+        // Redirect Logic
+        setTimeout(() => {
+            // Check if user is already logged in?
+            const user = localStorage.getItem('careflow_current_user');
+            if (user) {
+                // If logged in, go to their dashboard? 
+                // Or maybe always go to selection screen as per 'Select Profile' flow?
+                // The user asked strictly for "profiles select -> password -> dashboard".
+                // So let's force the selection screen to verify identity.
+                // Or maybe verify pin again. 
+                // Let's go to profiles-select.html
+                window.location.href = 'profiles-select.html';
+            } else {
+                window.location.href = 'profiles-select.html';
+            }
+        }, 1500);
+    </script>
+</body>
+
+</html>

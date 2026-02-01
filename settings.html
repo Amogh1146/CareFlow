@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CareFlow - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-20">
+
+    <div class="app-content max-w-md mx-auto relative min-h-screen">
+
+        <!-- Header -->
+        <header class="p-4 bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-30 flex items-center space-x-4">
+            <button onclick="history.back()"
+                class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                <i data-feather="arrow-left" class="w-6 h-6"></i>
+            </button>
+            <h1 class="text-xl font-bold">Settings</h1>
+        </header>
+
+        <main class="p-6 space-y-8">
+
+            <!-- Profile Section -->
+            <section class="space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Active Profile</h2>
+                <div
+                    class="card p-5 bg-white dark:bg-slate-800 shadow-xl rounded-3xl border border-blue-50 dark:border-slate-700 flex items-center justify-between relative overflow-hidden group">
+                    <!-- Decorative background glow -->
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
+
+                    <div class="flex items-center space-x-5 relative z-10">
+                        <div class="relative">
+                            <div
+                                class="w-20 h-20 rounded-[2rem] overflow-hidden border-4 border-white dark:border-slate-700 shadow-2xl rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                <img id="user-avatar-img" src="" alt="User" class="w-full h-full object-cover">
+                            </div>
+                            <div
+                                class="absolute -bottom-1 -right-1 bg-blue-600 text-white p-1.5 rounded-xl border-4 border-white dark:border-slate-800 shadow-lg">
+                                <i data-feather="check" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 id="user-name-display"
+                                class="font-black text-xl tracking-tight text-slate-800 dark:text-white">User Name</h3>
+                            <div class="flex items-center space-x-2 mt-1">
+                                <span id="user-role-display"
+                                    class="text-[10px] bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest px-2 py-1 rounded-lg">Role</span>
+                                <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Pro Account</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='profiles.html'"
+                        class="p-3 text-blue-600 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-2xl transition-all active:scale-90">
+                        <i data-feather="edit-3" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <button onclick="window.location.href='profiles-select.html'"
+                    class="w-full py-4 bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 font-bold rounded-2xl flex items-center justify-center space-x-2 transition hover:border-blue-500 hover:text-blue-500">
+                    <i data-feather="user-check" class="w-5 h-5"></i>
+                    <span>Switch Profile</span>
+                </button>
+            </section>
+
+            <!-- Preferences -->
+            <section class="space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Preferences</h2>
+                <div
+                    class="card bg-white dark:bg-slate-800 shadow-sm rounded-3xl border border-slate-100 dark:border-slate-700 overflow-hidden divide-y divide-slate-100 dark:divide-slate-700">
+
+                    <!-- Theme Toggle -->
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="bg-indigo-100 dark:bg-indigo-900/50 p-2 rounded-xl text-indigo-600 dark:text-indigo-400">
+                                <i data-feather="moon" class="w-5 h-5"></i>
+                            </div>
+                            <span class="font-bold">Dark Mode</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="dark-mode-toggle" class="sr-only peer"
+                                onchange="handleThemeChange()">
+                            <div
+                                class="w-12 h-7 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- App Scaling (Low Tech Mode) -->
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="bg-amber-100 dark:bg-amber-900/50 p-2 rounded-xl text-amber-600 dark:text-amber-400">
+                                <i data-feather="maximize" class="w-5 h-5"></i>
+                            </div>
+                            <span class="font-bold">Large Interface</span>
+                        </div>
+                        <button onclick="handleFontScaleChange()" id="scale-btn"
+                            class="text-xs font-bold px-4 py-2 bg-slate-100 dark:bg-slate-700 rounded-lg">OFF</button>
+                    </div>
+
+                    <!-- Health Notifications -->
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="bg-green-100 dark:bg-green-900/50 p-2 rounded-xl text-green-600 dark:text-green-400">
+                                <i data-feather="bell" class="w-5 h-5"></i>
+                            </div>
+                            <span class="font-bold">Meds Reminder</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400">SMART</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Support -->
+            <section class="space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Support & About</h2>
+                <div
+                    class="card bg-white dark:bg-slate-800 shadow-sm rounded-3xl border border-slate-100 dark:border-slate-700 overflow-hidden divide-y divide-slate-100 dark:divide-slate-700">
+                    <button onclick="showToast('Loading Help...')"
+                        class="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition text-left">
+                        <div class="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+                            <i data-feather="help-circle" class="w-5 h-5"></i>
+                            <span class="font-bold text-slate-900 dark:text-white">Help Center</span>
+                        </div>
+                        <i data-feather="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                    </button>
+                    <button onclick="showToast('Share link copied!')"
+                        class="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition text-left">
+                        <div class="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+                            <i data-feather="share-2" class="w-5 h-5"></i>
+                            <span class="font-bold text-slate-900 dark:text-white">Tell Friends</span>
+                        </div>
+                        <i data-feather="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Engineering Team -->
+            <section class="space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Engineering & Design</h2>
+                <div
+                    class="card bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/5 dark:to-purple-500/5 backdrop-blur-xl rounded-[2rem] p-6 border border-indigo-100/50 dark:border-indigo-500/20 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-all">
+                    </div>
+
+                    <div class="relative z-10 flex flex-col space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-500/30">
+                                <i data-feather="code" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <span class="font-black text-slate-800 dark:text-white uppercase tracking-tight">Lead
+                                Developers</span>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            <div class="bg-white dark:bg-slate-800 px-4 py-2 rounded-2xl shadow-sm border border-indigo-50 dark:border-slate-700 flex items-center space-x-2 animate-bounce transition-all hover:scale-105"
+                                style="animation-duration: 3s;">
+                                <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                                <span class="font-bold text-slate-700 dark:text-slate-200">Amogh</span>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 px-4 py-2 rounded-2xl shadow-sm border border-purple-50 dark:border-slate-700 flex items-center space-x-2 animate-bounce transition-all hover:scale-105"
+                                style="animation-duration: 3s; animation-delay: 0.5s;">
+                                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                                <span class="font-bold text-slate-700 dark:text-slate-200">Pratham</span>
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
+                            Crafted with precision for family care</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logout -->
+            <section class="pt-4">
+                <button onclick="logout()"
+                    class="w-full py-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 font-black rounded-2xl border border-red-100 dark:border-red-900 shadow-sm active:scale-95 transition-transform flex items-center justify-center space-x-2">
+                    <i data-feather="log-out" class="w-5 h-5"></i>
+                    <span>Log Out</span>
+                </button>
+                <p class="text-[10px] text-center text-slate-400 mt-6 uppercase tracking-widest">CareFlow Version 3.1.0
+                    • Built for Family</p>
+            </section>
+
+            <div class="h-10"></div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AppState.currentUser;
+            if (user) {
+                document.getElementById('user-avatar-img').src = user.avatar;
+                document.getElementById('user-name-display').textContent = user.name;
+                document.getElementById('user-role-display').textContent = user.role;
+            }
+
+            // Sync Toggles
+            const settings = AppState.settings;
+            document.getElementById('dark-mode-toggle').checked = settings.theme === 'dark';
+            updateFontScaleUI();
+
+            feather.replace();
+        });
+
+        function handleThemeChange() {
+            toggleTheme();
+        }
+
+        function handleFontScaleChange() {
+            toggleFontScale();
+            updateFontScaleUI();
+            showToast(AppState.settings.fontScale === 'large' ? 'Interface Enlarged' : 'Interface Reset');
+        }
+
+        function updateFontScaleUI() {
+            const btn = document.getElementById('scale-btn');
+            const isLarge = AppState.settings.fontScale === 'large';
+            btn.textContent = isLarge ? 'ON' : 'OFF';
+            if (isLarge) {
+                btn.classList.add('bg-blue-600', 'text-white');
+                btn.classList.remove('bg-slate-100', 'dark:bg-slate-700');
+            } else {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-slate-100', 'dark:bg-slate-700');
+            }
+        }
+    </script>
+</body>
+
+</html>

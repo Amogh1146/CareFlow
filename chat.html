@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CareFlow - Family Chat</title>
+    <meta name="theme-color" content="#4A90E2">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-brand-bg text-brand-text antialiased overflow-hidden">
+
+    <!-- App Container -->
+    <!-- App Container - Mobile Constraint -->
+    <div class="app-container h-screen flex flex-col max-w-md mx-auto bg-white shadow-2xl overflow-hidden relative">
+
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-4 border-b border-blue-600 flex-shrink-0">
+            <div class="max-w-md mx-auto flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button onclick="window.history.back()" class="text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl"
+                        id="chat-avatar">
+                        👥
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white" id="chat-title">Family Circle</h1>
+                        <p class="text-blue-100 text-xs" id="chat-subtitle">3 members online</p>
+                    </div>
+                </div>
+                <button onclick="toggleChatMenu()" class="text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Selector -->
+        <div id="chat-selector" class="bg-white border-b border-slate-200 px-6 py-3 flex-shrink-0">
+            <div class="max-w-md mx-auto flex space-x-2 overflow-x-auto">
+                <button onclick="selectChat('all')"
+                    class="chat-tab active px-4 py-2 rounded-full bg-blue-500 text-white font-semibold text-sm whitespace-nowrap">
+                    👥 All Members
+                </button>
+                <button onclick="selectChat('dad')"
+                    class="chat-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm whitespace-nowrap">
+                    👴 Dad
+                </button>
+                <button onclick="selectChat('asha')"
+                    class="chat-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm whitespace-nowrap">
+                    👩 Asha
+                </button>
+                <button onclick="selectChat('maya')"
+                    class="chat-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm whitespace-nowrap">
+                    👩‍⚕️ Nurse Maya
+                </button>
+                <button onclick="selectChat('doctor')"
+                    class="chat-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm whitespace-nowrap">
+                    👨‍⚕️ Dr. Sharma
+                </button>
+                <button onclick="selectChat('raj')"
+                    class="chat-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm whitespace-nowrap">
+                    💊 Raj
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="flex-1 overflow-y-auto bg-slate-50 px-6 py-4" id="messages-container">
+            <div class="max-w-md mx-auto space-y-4">
+
+                <!-- Date Divider -->
+                <div class="text-center">
+                    <span class="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold">Today</span>
+                </div>
+
+                <!-- Message from Asha -->
+                <div class="flex items-start space-x-2">
+                    <div
+                        class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        A
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-800 mb-1">Asha</p>
+                            <p class="text-slate-700">Dad took his morning meds on time! 🎉</p>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 ml-3">8:05 AM</p>
+                    </div>
+                </div>
+
+                <!-- Message from Nurse Maya -->
+                <div class="flex items-start space-x-2">
+                    <div
+                        class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        M
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-800 mb-1">Nurse Maya</p>
+                            <p class="text-slate-700">Great! I'll check his BP when I visit at 2 PM.</p>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 ml-3">8:12 AM</p>
+                    </div>
+                </div>
+
+                <!-- Your Message -->
+                <div class="flex items-end justify-end space-x-2">
+                    <div class="flex-1 flex flex-col items-end">
+                        <div
+                            class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-tr-sm p-3 shadow-sm max-w-xs">
+                            <p class="text-white">Thanks for the update! 💙</p>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 mr-3">8:15 AM</p>
+                    </div>
+                </div>
+
+                <!-- Message from Dr. Sharma -->
+                <div class="flex items-start space-x-2">
+                    <div
+                        class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        Dr
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-orange-50 border border-orange-200 rounded-2xl rounded-tl-sm p-3 shadow-sm">
+                            <p class="text-sm font-semibold text-orange-800 mb-1">Dr. Sharma</p>
+                            <p class="text-orange-900">Please monitor his BP closely. I've reviewed the latest reports -
+                                looking good!</p>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 ml-3">10:30 AM</p>
+                    </div>
+                </div>
+
+                <!-- Medication Reminder Card -->
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-white font-bold">Upcoming Medication</p>
+                            <p class="text-purple-100 text-sm">Calcium 500mg at 1:00 PM</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-white text-purple-600 py-2 rounded-xl font-bold text-sm">
+                        Remind Dad
+                    </button>
+                </div>
+
+                <!-- Message from Raj (Pharmacist) -->
+                <div class="flex items-start space-x-2">
+                    <div
+                        class="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        R
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-2xl rounded-tl-sm p-3 shadow-sm">
+                            <p class="text-sm font-semibold text-indigo-800 mb-1">Raj (Pharmacist)</p>
+                            <p class="text-indigo-900">Refill reminder: Pantoprazole running low (3 days left). Shall I
+                                prepare the order?</p>
+                            <div class="flex space-x-2 mt-3">
+                                <button class="flex-1 bg-indigo-500 text-white py-2 rounded-lg text-sm font-bold">Yes,
+                                    Order</button>
+                                <button
+                                    class="flex-1 bg-white border border-indigo-300 text-indigo-700 py-2 rounded-lg text-sm font-bold">Later</button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 ml-3">11:45 AM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Input -->
+        <div class="bg-white border-t border-slate-200 px-6 py-4 flex-shrink-0">
+            <div class="max-w-md mx-auto flex items-center space-x-3">
+                <button class="text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </button>
+                <input type="text" id="message-input" placeholder="Type a message..."
+                    class="flex-1 bg-slate-100 rounded-full px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="sendMessage()"
+                    class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-3 rounded-full active:scale-95 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('💬 Chat Interface Loaded');
+
+        function selectChat(chatId) {
+            // Update active tab
+            document.querySelectorAll('.chat-tab').forEach(tab => {
+                tab.classList.remove('active', 'bg-blue-500', 'text-white');
+                tab.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            event.target.classList.add('active', 'bg-blue-500', 'text-white');
+            event.target.classList.remove('bg-slate-100', 'text-slate-700');
+
+            // Update header
+            const avatars = {
+                all: '👥',
+                dad: '👴',
+                asha: '👩',
+                maya: '👩‍⚕️',
+                doctor: '👨‍⚕️',
+                raj: '💊'
+            };
+            const titles = {
+                all: 'Family Circle',
+                dad: 'Dad',
+                asha: 'Asha',
+                maya: 'Nurse Maya',
+                doctor: 'Dr. Sharma',
+                raj: 'Raj (Pharmacist)'
+            };
+
+            document.getElementById('chat-avatar').textContent = avatars[chatId];
+            document.getElementById('chat-title').textContent = titles[chatId];
+            document.getElementById('chat-subtitle').textContent = chatId === 'all' ? '3 members online' : 'Online';
+
+            // In a real app, load messages for this chat
+            console.log(`Switched to chat: ${chatId}`);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add message to chat
+            const container = document.getElementById('messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-end justify-end space-x-2';
+            messageDiv.innerHTML = `
+                <div class="flex-1 flex flex-col items-end">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-tr-sm p-3 shadow-sm max-w-xs">
+                        <p class="text-white">${message}</p>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1 mr-3">Just now</p>
+                </div>
+            `;
+            container.querySelector('.max-w-md').appendChild(messageDiv);
+
+            // Clear input
+            input.value = '';
+
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+
+            // Vibrate if supported
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Send on Enter key
+        document.getElementById('message-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function toggleChatMenu() {
+            alert('Chat menu: Mute notifications, View members, Leave chat');
+        }
+
+        // Auto-scroll to bottom on load
+        document.getElementById('messages-container').scrollTop =
+            document.getElementById('messages-container').scrollHeight;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CareFlow - Manage Profiles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white">
+
+    <div class="app-content max-w-md mx-auto relative min-h-screen">
+
+        <!-- Header -->
+        <header class="p-4 bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <button onclick="history.back()"
+                    class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-feather="arrow-left" class="w-6 h-6"></i>
+                </button>
+                <h1 class="text-lg font-bold">Manage Family</h1>
+            </div>
+        </header>
+
+        <main class="p-4 space-y-4">
+            <!-- Profile List Container -->
+            <div id="profile-list" class="space-y-3">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Add New Button -->
+            <button onclick="openEditModal()"
+                class="w-full py-4 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl flex items-center justify-center text-slate-500 hover:border-blue-500 hover:text-blue-500 transition-colors">
+                <i data-feather="user-plus" class="w-5 h-5 mr-2"></i>
+                <span class="font-bold">Add New Member</span>
+            </button>
+        </main>
+    </div>
+
+    <!-- Edit Modal (Hidden by default) -->
+    <div id="edit-modal"
+        class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl relative animate-fade-in-up">
+            <button onclick="closeEditModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-feather="x" class="w-6 h-6"></i>
+            </button>
+
+            <h2 class="text-xl font-bold mb-6" id="modal-title">Edit Profile</h2>
+
+            <div class="space-y-4">
+                <!-- Avatar Upload -->
+                <div class="flex flex-col items-center mb-8 relative">
+                    <div class="relative group cursor-pointer"
+                        onclick="document.getElementById('avatar-input').click()">
+                        <!-- Glowing ring -->
+                        <div
+                            class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition-opacity">
+                        </div>
+
+                        <div
+                            class="w-28 h-28 rounded-[2.2rem] overflow-hidden border-4 border-white dark:border-slate-700 shadow-2xl relative z-10 transition-transform group-active:scale-95">
+                            <img id="edit-avatar-preview" src="" class="w-full h-full object-cover">
+                            <div
+                                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i data-feather="camera" class="w-8 h-8 text-white"></i>
+                            </div>
+                        </div>
+
+                        <div
+                            class="absolute -bottom-2 -right-2 bg-blue-600 text-white p-2 rounded-2xl border-4 border-white dark:border-slate-800 shadow-xl z-20">
+                            <i data-feather="plus" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Tap to change photo</p>
+                    <input type="file" id="avatar-input" class="hidden" accept="image/*"
+                        onchange="handleAvatarSelect(this)">
+                </div>
+
+                <!-- Inputs -->
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase">Name</label>
+                    <input type="text" id="edit-name"
+                        class="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase">Role</label>
+                    <select id="edit-role"
+                        class="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-bold">
+                        <option value="patient">Patient</option>
+                        <option value="caregiver">Caregiver</option>
+                        <option value="family">Family Member</option>
+                        <option value="pharmacist">Pharmacist</option>
+                        <option value="doctor">Doctor</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 uppercase">Phone</label>
+                    <input type="tel" id="edit-phone"
+                        class="w-full p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-bold">
+                </div>
+
+                <button onclick="saveProfile()"
+                    class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg mt-4">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', renderProfiles);
+
+        function renderProfiles() {
+            const container = document.getElementById('profile-list');
+            container.innerHTML = '';
+
+            Object.entries(AppState.profiles).forEach(([key, profile]) => {
+                const el = document.createElement('div');
+                el.className = 'card bg-white dark:bg-slate-800 p-4 flex items-center justify-between border border-blue-50 dark:border-slate-700 rounded-3xl shadow-sm hover:shadow-md transition-all group';
+                el.innerHTML = `
+                    <div class="flex items-center space-x-5">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-slate-100 dark:border-slate-700 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                                <img src="${profile.avatar}" alt="${profile.name}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-xl tracking-tight text-slate-800 dark:text-white">${profile.name}</h3>
+                            <div class="flex items-center space-x-2 mt-0.5">
+                                <span class="text-[9px] font-black bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded uppercase tracking-widest">${profile.role}</span>
+                                ${profile.phone ? `<span class="text-[10px] text-slate-400 font-bold">${profile.phone}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openEditModal('${key}')" class="p-3 bg-slate-50 dark:bg-slate-700/50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-2xl transition-all active:scale-90">
+                        <i data-feather="edit-3" class="w-5 h-5"></i>
+                    </button>
+                `;
+                container.appendChild(el);
+            });
+            feather.replace();
+        }
+
+        function openEditModal(key = null) {
+            const modal = document.getElementById('edit-modal');
+            const title = document.getElementById('modal-title');
+
+            if (key) {
+                const p = AppState.profiles[key];
+                document.getElementById('edit-id').value = key; // Use the key (e.g., 'Dad') as ID roughly
+                document.getElementById('edit-name').value = p.name;
+                document.getElementById('edit-role').value = p.role;
+                document.getElementById('edit-phone').value = p.phone || '';
+                document.getElementById('edit-avatar-preview').src = p.avatar;
+                title.textContent = 'Edit Profile';
+            } else {
+                document.getElementById('edit-id').value = 'NEW_' + Date.now();
+                document.getElementById('edit-name').value = '';
+                document.getElementById('edit-role').value = 'family';
+                document.getElementById('edit-phone').value = '';
+                document.getElementById('edit-avatar-preview').src = 'assets/profiles/asha.png';
+                title.textContent = 'Add New Member';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+        }
+
+        function handleAvatarSelect(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('edit-avatar-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveProfile() {
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value;
+            const role = document.getElementById('edit-role').value;
+            const phone = document.getElementById('edit-phone').value;
+            const avatar = document.getElementById('edit-avatar-preview').src;
+
+            if (!name) return alert('Name is required');
+
+            // If ID exists in profiles (i.e. 'Dad'), update it.
+            // If it's a new ID, check if name matches existing to avoid overwrite by accident?
+            // For this demo, we use the original key if editing, or name as key if new.
+
+            let targetKey = id;
+            if (id.startsWith('NEW_')) {
+                targetKey = name; // Use name as key for simplicity in demo
+            }
+
+            const newData = {
+                id: targetKey,
+                name,
+                role,
+                phone,
+                avatar
+            };
+
+            // Update Global State
+            AppState.profiles[targetKey] = newData;
+            syncProfiles(); // Saves
+
+            // UI Update
+            closeEditModal();
+            renderProfiles();
+            showToast('Profile Saved');
+        }
+    </script>
+</body>
+
+</html>

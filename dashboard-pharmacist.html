@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CareFlow - Pharmacist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body class="bg-blue-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-24">
+
+    <div class="app-content max-w-md mx-auto relative min-h-screen">
+
+        <header
+            class="p-6 pt-10 sticky top-0 bg-blue-50/95 dark:bg-slate-900/95 backdrop-blur z-20 shadow-sm border-b border-blue-100 dark:border-slate-800">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">Store Dashboard</h1>
+                    <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Raj • Mumbai
+                        Pharma</p>
+                </div>
+                <div
+                    class="w-10 h-10 rounded-full overflow-hidden border border-blue-200 bg-white flex items-center justify-center cursor-pointer shadow-sm">
+                    <img src="assets/profiles/raj.png" alt="Raj">
+                </div>
+            </div>
+        </header>
+
+        <main class="px-6 space-y-6 mt-4">
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 gap-4">
+                <div
+                    class="card p-4 bg-white dark:bg-slate-800 shadow-sm rounded-2xl flex flex-col justify-between h-28">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pending Orders</p>
+                    <div class="flex items-end justify-between">
+                        <p class="text-4xl font-black text-blue-600" id="stat-pending">12</p>
+                        <div class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                            <i data-feather="shopping-bag" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="card p-4 bg-white dark:bg-slate-800 shadow-sm rounded-2xl flex flex-col justify-between h-28 border border-red-100 dark:border-red-900/30">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Low Stock</p>
+                    <div class="flex items-end justify-between">
+                        <p class="text-4xl font-black text-red-500" id="stat-stock">4</p>
+                        <div class="bg-red-100 p-2 rounded-lg text-red-500">
+                            <i data-feather="alert-triangle" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests -->
+            <section>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Priority Fulfillment</h2>
+                    <button class="text-blue-600 text-[10px] font-bold bg-blue-100 px-2 py-1 rounded">View All</button>
+                </div>
+
+                <div class="space-y-3" id="orders-list">
+                    <!-- Item 1 -->
+                    <div
+                        class="card p-4 bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-700 order-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-10 h-10 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center font-bold text-slate-500">
+                                    <img src="assets/profiles/dad.png" alt="Dad">
+                                </div>
+                                <div>
+                                    <p class="font-bold">Dad (Patient)</p>
+                                    <p class="text-xs text-slate-500">#RX-4092 • 2 Items</p>
+                                </div>
+                            </div>
+                            <span
+                                class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-full">New</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg mb-3">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium">Dolo 650</span>
+                                <span class="text-slate-500">x30</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="font-medium">Pan-D</span>
+                                <span class="text-slate-500">x15</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="rejectOrder(this)"
+                                class="flex-1 py-2 border border-slate-200 text-slate-500 rounded-xl font-bold text-xs hover:bg-slate-50 transition">Delay</button>
+                            <button onclick="dispatchOrder(this)"
+                                class="flex-1 py-2 bg-blue-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition active:scale-95 flex items-center justify-center">
+                                <span>Dispatch</span>
+                                <i data-feather="truck" class="w-3 h-3 ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div
+                        class="card p-4 bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-700 order-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center font-bold text-pink-600">
+                                    M</div>
+                                <div>
+                                    <p class="font-bold">Mom (Patient)</p>
+                                    <p class="text-xs text-slate-500">#RX-4093 • 1 Item</p>
+                                </div>
+                            </div>
+                            <span
+                                class="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-1 rounded-full">Pending</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg mb-3">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-medium">Insulin Glargine</span>
+                                <span class="text-slate-500">2 Vials</span>
+                            </div>
+                        </div>
+                        <button onclick="dispatchOrder(this)"
+                            class="w-full py-2 bg-blue-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition active:scale-95">
+                            Dispatch Order
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory -->
+            <section>
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Inventory Alerts</h2>
+                <div
+                    class="card p-4 border-l-4 border-red-500 dark:bg-slate-800 bg-white shadow-sm rounded-r-2xl flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-slate-800 dark:text-white">Aten-5</p>
+                        <p class="text-xs text-red-500 font-bold group-hover:hidden">2 Packs Remaining</p>
+                        <p class="text-xs text-orange-500 font-bold hidden group-hover:block">Restock Recommended</p>
+                    </div>
+                    <button onclick="reorderItem(this)"
+                        class="text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg text-xs font-bold transition-all">
+                        Reorder
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Nav -->
+        <nav
+            class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 pb-[env(safe-area-inset-bottom)] z-50 max-w-md mx-auto shadow-[0_-5px_10px_rgba(0,0,0,0.05)]">
+            <div class="h-16 flex justify-around items-center px-4">
+                <a href="#"
+                    class="nav-btn flex flex-col items-center text-blue-600 transition-transform active:scale-90">
+                    <i data-feather="package" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Orders</span>
+                </a>
+                <!-- Chat Disabled UI -->
+                <div class="nav-btn flex flex-col items-center text-slate-300 cursor-not-allowed opacity-50 relative"
+                    onclick="showToast('Feature Disabled for Pharmacist')">
+                    <i data-feather="message-square" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Chat</span>
+                    <div class="absolute -top-1 -right-1 bg-slate-200 rounded-full p-0.5">
+                        <i data-feather="slash" class="w-3 h-3 text-slate-500"></i>
+                    </div>
+                </div>
+                <a href="settings.html"
+                    class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition-colors active:scale-90">
+                    <i data-feather="settings" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Settings</span>
+                </a>
+            </div>
+        </nav>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AppState.currentUser;
+            if (user) {
+                // Update header info
+                const headerName = document.querySelector('header h1 + p');
+                const headerImg = document.querySelector('header img');
+
+                if (headerImg) headerImg.src = user.avatar;
+                if (headerName) headerName.textContent = `${user.name} • Mumbai Pharma`;
+            }
+            feather.replace();
+        });
+
+        function dispatchOrder(btn) {
+            // Animate removal
+            const card = btn.closest('.card');
+            card.style.transform = 'translateX(100%)';
+            card.style.opacity = '0';
+            card.style.transition = 'all 0.5s ease';
+
+            setTimeout(() => {
+                card.remove();
+                // Update stats
+                const stat = document.getElementById('stat-pending');
+                stat.innerText = parseInt(stat.innerText) - 1;
+                showToast('Order Dispatched Successfully ✅');
+            }, 500);
+        }
+
+        function reorderItem(btn) {
+            btn.innerHTML = `<i data-feather="loader" class="w-3 h-3 animate-spin mr-1"></i> Processing`;
+            feather.replace();
+
+            setTimeout(() => {
+                btn.className = "text-green-600 bg-green-50 px-4 py-2 rounded-lg text-xs font-bold border border-green-200";
+                btn.innerHTML = `<i data-feather="check" class="w-3 h-3 mr-1"></i> Ordered`;
+                feather.replace();
+                showToast('Restock Request Sent');
+            }, 1000);
+        }
+
+        function rejectOrder(btn) {
+            showToast('Order marked for review');
+        }
+    </script>
+</body>
+
+</html>
